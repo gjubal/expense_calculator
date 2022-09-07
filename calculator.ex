@@ -19,7 +19,7 @@ defmodule ExpenseCalculator do
 
     {_expense_values_list, total} = sum
 
-    :erlang.float_to_binary(total, [decimals: 2])
+    Float.round(total, 2)
   end
 
   def calculate_weekly_total(week_number) do
@@ -44,9 +44,43 @@ defmodule ExpenseCalculator do
     {_expense_values_list, total} = sum
 
     cond do
-      is_float(total) -> :erlang.float_to_binary(total, [decimals: 2])
+      is_float(total) -> Float.round(total, 2)
       true -> 0.0
     end
+  end
+
+  def calculate_daily_average() do
+    data = File.read!(@expenses_file)
+
+    first_day =
+      data
+      |> String.split("\n")
+      |> List.first()
+      |> String.split(" ", trim: true)
+      |> List.last()
+
+    first_day_iso =
+      Date.new!(
+        2022,
+        get_date(first_day, :month),
+        get_date(first_day, :day)
+      )
+
+    last_day =
+      data
+      |> String.split("\n")
+      |> List.last()
+      |> String.split(" ", trim: true)
+      |> List.last()
+
+    last_day_iso =
+      Date.new!(
+        2022,
+        get_date(last_day, :month),
+        get_date(last_day, :day)
+      )
+
+      Float.round(calculate_monthly_total() / Date.diff(last_day_iso, first_day_iso), 2)
   end
 
   defp check_if_float(input) do
@@ -59,9 +93,23 @@ defmodule ExpenseCalculator do
 
   defp check_for_input(nil), do: ""
   defp check_for_input(data), do: data
+
+  defp get_date(date_string, :month) do
+    date_string
+    |> String.split("/")
+    |> List.first()
+    |> String.to_integer()
+  end
+  defp get_date(date_string, :day) do
+    date_string
+    |> String.split("/")
+    |> List.last()
+    |> String.to_integer()
+  end
 end
 
 IO.puts("Total expenses for the month: #{ExpenseCalculator.calculate_monthly_total()}\n")
+IO.puts("Daily average: #{ExpenseCalculator.calculate_daily_average()}\n")
 IO.puts("* Week one: #{ExpenseCalculator.calculate_weekly_total(1)}")
 IO.puts("* Week two: #{ExpenseCalculator.calculate_weekly_total(2)}")
 IO.puts("* Week three: #{ExpenseCalculator.calculate_weekly_total(3)}")
