@@ -68,7 +68,7 @@ defmodule ExpenseCalculator do
 
     last_day =
       data
-      |> String.split("\n")
+      |> String.split("\n", trim: true)
       |> List.last()
       |> String.split(" ", trim: true)
       |> List.last()
@@ -108,9 +108,9 @@ defmodule ExpenseCalculator do
   end
 end
 
-IO.puts("Total expenses for the month: #{ExpenseCalculator.calculate_monthly_total()}\n")
-IO.puts("Daily average: #{ExpenseCalculator.calculate_daily_average()}\n")
-IO.puts("* Week one: #{ExpenseCalculator.calculate_weekly_total(1)}")
-IO.puts("* Week two: #{ExpenseCalculator.calculate_weekly_total(2)}")
-IO.puts("* Week three: #{ExpenseCalculator.calculate_weekly_total(3)}")
-IO.puts("* Week four: #{ExpenseCalculator.calculate_weekly_total(4)}")
+IO.puts("Total expenses for the month: $#{ExpenseCalculator.calculate_monthly_total()}\n")
+IO.puts("Daily average: $#{ExpenseCalculator.calculate_daily_average()}\n")
+IO.puts("* Week one:   $#{ExpenseCalculator.calculate_weekly_total(1)}")
+IO.puts("* Week two:   $#{ExpenseCalculator.calculate_weekly_total(2)}")
+IO.puts("* Week three: $#{ExpenseCalculator.calculate_weekly_total(3)}")
+IO.puts("* Week four:  $#{ExpenseCalculator.calculate_weekly_total(4)}")
