@@ -83,6 +83,30 @@ defmodule ExpenseCalculator do
       Float.round(calculate_monthly_total() / Date.diff(last_day_iso, first_day_iso), 2)
   end
 
+  def calculate_category_breakdown() do
+    data = File.read!(@expenses_file)
+
+    data
+    |> String.split("~", trim: true)
+    |> Enum.map(&(String.split(&1, "\n", trim: true)))
+    |> List.flatten()
+    |> parse_list_into_category_tuples()
+    |> Enum.group_by(fn {_p, c} -> c end, fn {p, _c} -> p end)
+    |> Enum.map(fn {c, prices_list} -> {c, Float.round(Enum.sum(prices_list), 2)} end)
+    |> Enum.each(fn {category, price} ->
+      category_display_name =
+        category
+        |> String.replace("@", "")
+        |> String.capitalize()
+
+        if String.length(category_display_name) < 5 do
+          IO.puts("#{category_display_name}: \t\t$#{price}")
+        else
+          IO.puts("#{category_display_name}: \t$#{price}")
+        end
+      end)
+  end
+
   defp check_if_float(input) do
     try do
       String.to_float(input)
@@ -106,6 +130,22 @@ defmodule ExpenseCalculator do
     |> List.last()
     |> String.to_integer()
   end
+
+  defp parse_list_into_category_tuples(expenses_list) do
+    expenses_list
+    |> Enum.map(fn line ->
+      {unformatted_price, category} =
+        line
+        |> String.split("-", trim: true)
+        |> List.first()
+        |> String.split(" ", trim: true)
+        |> List.to_tuple()
+
+        price = String.to_float(unformatted_price)
+
+        {price, category}
+    end)
+  end
 end
 
 IO.puts("Total expenses for the month: $#{ExpenseCalculator.calculate_monthly_total()}\n")
@@ -113,4 +153,6 @@ IO.puts("Daily average: $#{ExpenseCalculator.calculate_daily_average()}\n")
 IO.puts("* Week one:   $#{ExpenseCalculator.calculate_weekly_total(1)}")
 IO.puts("* Week two:   $#{ExpenseCalculator.calculate_weekly_total(2)}")
 IO.puts("* Week three: $#{ExpenseCalculator.calculate_weekly_total(3)}")
-IO.puts("* Week four:  $#{ExpenseCalculator.calculate_weekly_total(4)}")
+IO.puts("* Week four:  $#{ExpenseCalculator.calculate_weekly_total(4)}\n")
+IO.puts("Category breakdown: \n")
+ExpenseCalculator.calculate_category_breakdown()
