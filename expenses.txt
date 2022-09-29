@@ -9,9 +9,9 @@
 25.47 @groceries - 9lbs chicken aldi 9/04
 47.02 @groceries - groceries target 9/04
 43.03 @eating_out - sfihas com o fire 9/04
-8.89 @eating_out - chipotle dinner 9/05
 ~
-16.50 @living - air freshener 9/07
+8.89 @eating_out - chipotle dinner 9/05
+16.50 @miscellaneous - air freshener 9/07
 8.00 @memberships - spotify mensal 9/07
 8.89 @eating_out - chipotle 9/07
 20.11 @eating_out - five guys 9/08
@@ -19,6 +19,29 @@
 8.89 @eating_out - chipotle 9/09
 59.02 @groceries - target groceries 9/10
 27.16 @groceries - aldi 10lbs chicken 9/10
-29.33 @living - toothbrushes and dishwasher pods 9/10
+29.33 @miscellaneous - toothbrushes and dishwasher pods 9/10
 49.02 @eating_out - handroll jantar 9/10
 41.28 @gas - gas 9/11
+~
+21.29 @miscellaneous - jump rope 9/12
+8.89 @eating_out - chipotle 9/12
+9.08 @groceries - target 9/13
+20.0 @tolls - epass 9/14
+2.58 @miscellaneous - staples 9/14
+36.12 @eating_out - hooters 9/15
+7.99 @groceries - coffee grounds 9/16
+14.33 @miscellaneous - massage 9/16
+17.17 @eating_out - steak n shake 9/16
+9.00 @eating_out - chipotle 9/16
+8.89 @eating_out - chipotle 9/17
+48.08 @groceries - target 9/17
+25.55 @eating_out - oh que bueno 9/17
+11.66 @eating_out - chipotle 9/18
+~
+15.98 @eating_out - chipotle 9/21
+37.19 @gas - gas 9/22
+12.25 @eating_out - chipotle 9/22
+2.99 @memberships - icloud 9/23
+8.63 @eating_out - wendys 9/23
+9.02 @eating_out - chipotle 9/23
+25.0 @gym - onelife ptc 9/24

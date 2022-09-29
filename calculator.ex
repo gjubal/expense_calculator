@@ -99,12 +99,35 @@ defmodule ExpenseCalculator do
         |> String.replace("@", "")
         |> String.capitalize()
 
-        if String.length(category_display_name) < 5 do
+        if String.length(category_display_name) < 6 do
           IO.puts("#{category_display_name}: \t\t$#{price}")
         else
           IO.puts("#{category_display_name}: \t$#{price}")
         end
       end)
+  end
+
+  def calculate_most_expensive_expenditures() do
+    data = File.read!(@expenses_file)
+
+    entries =
+      data
+      |> String.split("~", trim: true)
+      |> Enum.map(&(String.split(&1, "\n", trim: true)))
+      |> List.flatten()
+      |> parse_list_into_description_tuples()
+      |> Enum.group_by(fn {[first_el | _rest], _p} -> first_el end, fn {_l, p} -> p end)
+      |> Enum.map(fn {description, prices_list} -> {description, Enum.sum(prices_list)} end)
+      |> Enum.sort_by(fn {_d, p} -> p end, :desc)
+      |> Enum.take(5)
+
+    for {entry, total} <- entries do
+      if String.length(entry) < 7 do
+        IO.puts("#{String.capitalize(entry)}:\t\t $#{total}")
+      else
+        IO.puts("#{String.capitalize(entry)}:\t $#{total}")
+      end
+    end
   end
 
   defp check_if_float(input) do
@@ -146,13 +169,40 @@ defmodule ExpenseCalculator do
         {price, category}
     end)
   end
+
+  defp parse_list_into_description_tuples(expenses_list) do
+    expenses_list
+    |> Enum.map(fn line ->
+      description_list =
+        line
+        |> String.split("-", trim: true)
+        |> List.last()
+        |> String.split(" ", trim: true)
+        |> Enum.drop(-1)
+        |> List.flatten()
+
+      price_list =
+        line
+        |> String.split("-", trim: true)
+        |> List.first()
+        |> String.split(" ", trim: true)
+        |> List.first()
+        |> String.to_float()
+
+      {description_list, price_list}
+    end)
+
+  end
 end
 
 IO.puts("Total expenses for the month: $#{ExpenseCalculator.calculate_monthly_total()}\n")
-IO.puts("Daily average: $#{ExpenseCalculator.calculate_daily_average()}\n")
 IO.puts("* Week one:   $#{ExpenseCalculator.calculate_weekly_total(1)}")
 IO.puts("* Week two:   $#{ExpenseCalculator.calculate_weekly_total(2)}")
 IO.puts("* Week three: $#{ExpenseCalculator.calculate_weekly_total(3)}")
 IO.puts("* Week four:  $#{ExpenseCalculator.calculate_weekly_total(4)}\n")
+IO.puts("Daily average: $#{ExpenseCalculator.calculate_daily_average()}\n")
+IO.puts("Top 5 most expensive entries:\n")
+ExpenseCalculator.calculate_most_expensive_expenditures();
+IO.puts("")
 IO.puts("Category breakdown: \n")
 ExpenseCalculator.calculate_category_breakdown()
