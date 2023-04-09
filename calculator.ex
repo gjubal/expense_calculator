@@ -123,9 +123,9 @@ defmodule ExpenseCalculator do
 
     for {entry, total} <- entries do
       if String.length(entry) < 7 do
-        IO.puts("#{String.capitalize(entry)}:\t\t $#{total}")
+        IO.puts("#{String.capitalize(entry)}:\t\t $#{Float.round(total, 2)}")
       else
-        IO.puts("#{String.capitalize(entry)}:\t $#{total}")
+        IO.puts("#{String.capitalize(entry)}:\t $#{Float.round(total, 2)}")
       end
     end
   end
